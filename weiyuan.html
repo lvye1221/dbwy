@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>代表委员在哪里呀</title>
+	</head>
+	<link rel="stylesheet" href="bt/css/bootstrap.css" />
+	<script type="text/javascript" src="bt/js/jquery.min.js"></script>
+	<script type="text/javascript" src="bt/js/bootstrap.min.js"></script>
+	<style>
+		*{
+			margin: 0 auto;
+			padding: 0;
+			overflow: hidden;
+		}
+		.cover{
+			width: 100%;
+			height: 100vh;
+			background-image: url(img/weiyuan/cover_vf.jpg);
+			background-size: 100% 100%;
+		}
+		.container{
+			/*width: 60%;*/
+			height: 100%;
+			position: relative;
+		}
+		.c_dht{
+			width: 100%;
+			height: 100%;
+			top: 70%;
+			position: absolute;
+			background-image: url(img/weiyuan/cover_dht.png);
+			background-size: 100% 100%;
+			text-align: center;
+			font-size: 20px;
+			line-height: 500px;
+		}
+		.c_title{
+			width: 80%;
+			height: 40%;
+			position: absolute;
+			top: -50%;
+			left: 10%;
+			background-image: url(img/weiyuan/cover_title.png);
+			background-size: 100% 100%;
+		}
+		.c_man{
+			width: 14%;
+			height: 35%;
+			position: absolute;
+			/*animation: zhuan 1s;*/
+			-webkit-animation:zhuan 1s;
+			-webkit-animation-timing-function: linear;/*动画播放的速度,默认ease(慢-快-慢),linear表示匀速*/
+			-webkit-animation-iteration-count: initial;/*动画播放的次数,initial表示循环播放*/
+			-webkit-animation-direction: alternate;/*动画播放完是否逆向播放,alternate表示逆向*/
+		}
+		.c_woman{
+			width: 14%;
+			height: 35%;
+			position: absolute;
+			right: 0px;
+		}
+		@-webkit-keyframes zhuan{
+			from{-webkit-transform: rotate(0deg);left: 0%;}
+			to{-webkit-transform: rotate(30deg);left: 40%;}
+		}
+		.c_jz{
+			width: 30%;
+			height: 50%;
+			position: absolute;
+			bottom: -50%;
+			right: 5%;
+			background-image: url(img/weiyuan/cover_jz.png);
+			background-size: 100%;
+		}
+		.c_btns{
+			width: 60%;
+			height: 30%;
+			position: absolute;
+			bottom: -30%;
+			left: 20%;
+			text-align: center;
+		}
+		.c_btn{
+			width: 60%;
+			height: 35%;
+			margin-bottom: 10%;
+		}
+	</style>
+	<body>
+		<div class="cover row">
+			<div class="container col-lg-6 col-lg-offset-3 col-sm-12">
+				<div class="c_dht">djakshfjkshdjfhisudyfisadbfjkhfakjs</div>
+				<div class="c_title">
+					<img class="c_man" src="img/weiyuan/header_01.png" />
+					<img class="c_woman" src="img/weiyuan/header_02.png" />
+				</div>
+				<div class="c_jz"></div>
+				<div class="c_btns">
+					<img class="c_btn" src="img/weiyuan/game_start.png" />
+					<img class="c_btn" src="img/weiyuan/game_way.png" />
+				</div>
+			</div>
+			
+		</div>
+	</body>
+	<script>
+		
+		
+		window.onload=function(){
+			//页面加载完成后进行开场动画
+			$(".c_dht").animate({
+				"top":10+"%"
+			},1000,function(){
+				//天安门动画之后动主题部分和主持人部分
+				$(".c_title").animate({
+					"top":10+"%"
+				},1000);
+				//主持人的动画效果
+				$(".c_jz").animate({
+					"bottom":0+"%"
+				},1000,function(){
+					//主持人动画结束进行按钮组的动画
+					$(".c_btns").animate({
+						"bottom":10+"%"
+					},1000);
+				});
+			});
+			
+			
+		}
+		
+	</script>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>赛车</title>
+		<link rel="stylesheet" href="bt/css/bootstrap.css" />
+		<script type="text/javascript" src="bt/js/jquery.min.js"></script>
+		<script type="text/javascript" src="bt/js/bootstrap.min.js"></script>
+	</head>
+	<style>
+		*{
+			margin: 0px;
+			padding: 0px;
+			overflow: hidden;
+		}
+		.left{
+			width: 45%;
+		}
+		.right{
+			width: 55%;
+			left: 45%;		
+		}
+		.mod{
+			position: absolute;
+			height: 100vh;
+			background-color: #5BC0DE;
+			opacity: 0.7;
+		}
+		.btns{
+			width: 200px;
+			height: 200px;
+			position: absolute;
+			left: 40%;
+			top: 25%;
+		}
+		.btn{
+			width: 200px;
+			height: 60px;
+			background-color: darkorange;
+			margin-bottom: 10px;
+			font-size: 24px;
+			border-radius: 15px;
+		}
+		.road{
+			overflow: hidden;
+			width: 50%;
+			height: 100vh;
+			left: 25%;
+			position: absolute;
+			background-color: #808080;
+			border-left: 5px black solid;
+			border-right: 5px black solid;
+			display: -webkit-box;
+		}
+		/*track指每条道路*/
+		.track{
+			-webkit-box-flex: 1;
+			height: 200%;
+			margin-top: -100%;
+			/*animation: trackrun 1s linear 0s infinite;*/
+			-webkit-animation-name: trackrun;
+			-webkit-animation-duration: 3s;
+			-webkit-animation-timing-function: linear;
+			-webkit-animation-iteration-count: infinite;
+		}
+		/*one是指有边框的div*/
+		.one{
+			border-right:7px white dashed;
+		}
+		@-webkit-keyframes trackrun{
+			from{margin-top:-100%}
+			to{margin-top: 0;}
+		}
+		.me{
+			width: 20%;
+			height: 20%;
+			bottom: 0px;
+			left: 40%;
+			position: absolute;
+			background-color: green;
+		}
+		.yellow{
+			width: 20%;
+			height: 20%;
+			top: -200px;
+			left: 0;
+			position: absolute;
+			background-color: yellow;
+		}
+		.point{
+			position: absolute;
+			margin-left: 20px;
+			width: 180px;
+			height: 40px;
+			font-size: 30px;
+			color: red;
+		}
+	</style>
+	<body>
+		
+		<div class="road">
+			<div class="one track"></div>
+			<div class="one track"></div>
+			<div class="one track"></div>
+			<div class="one track"></div>
+			<div class="track"></div>
+			<div class="me"></div>
+		</div>
+		<div class="point">积分：0</div>
+		<div class="left mod"></div>
+		<div class="right mod"></div>
+		<div class="btns">
+			<button class="btn btn-group-lg" onclick="start(1)">难度1</button>
+			<button class="btn btn-group-lg" onclick="start(2)">难度2</button>
+			<button class="btn btn-group-lg" onclick="start(3)">难度3</button>
+		</div>
+		
+	</body>
+	<script>
+	var time;
+	var points=0;
+	var me_x=2;
+	var yellows=[];
+		window.onload=function(){
+			//刷新积分的计时器
+			setInterval(function(){
+				$(".point").html("积分："+points);
+			},100);
+		}
+		//开始游戏点击事件
+		function start(e){
+			var createtime;//创造一个敌人的时间
+			var showtime;//敌人从开始走到最后的时间
+			if(e==1){
+				clearInterval(time);
+				createtime=1400;showtime=1800;
+			}else if(e==2){
+				clearInterval(time);
+				createtime=900;showtime=1200;
+			}else if(e==3){
+				clearInterval(time);
+				createtime=400;showtime=600;
+			}
+				//左边的巨幕向左拉
+				$(".left").animate({
+					"left":-$(".left").width()+"px"
+				},1000);
+				//右边的巨幕向右拉
+				$(".right").animate({
+					"left":$(window).width()+"px"
+				},1000);
+				//按钮向左拉
+				$(".btns").animate({
+					"left":"0px"
+				},1000,function(){
+					//拉完执行敌人出现事件
+					createy(createtime,showtime)
+				});
+		}
+		//当浏览器窗口大小改变时，改变 div的位置
+        window.onresize=function(){  
+                $(".me").css("left",$(".road").width()*0.4+"px");
+        } 
+        //键盘监听事件
+		document.onkeydown=function(event){
+			var e = event || window.event || arguments.callee.caller.arguments[0];//不明觉厉
+			if(e&&e.keyCode==37){//left键
+//				alert("xiangzuo");
+				if(me_x>0){
+					//$(".me").css("left",$(".me").position().left-135+"px");//瞬变
+					$(".me").animate({
+						"left":$(".me").position().left-$(window).width()*0.1+"px"
+						},50,function(){me_x-=1});//渐变
+				}
+			}
+			if(e&&e.keyCode==39){//right键
+				if(me_x<4){
+					//$(".me").css("left",$(".me").position().left+135+"px");
+					$(".me").animate({
+						"left":$(".me").position().left+$(window).width()*0.1+"px"
+						},50,function(){me_x+=1});
+				}
+			}
+		}
+		//规定时间内创造出yellow敌人
+		function createy(createtime,showtime){
+			var from=$(window).height()*0.6;
+			var to=$(window).height()*0.8;
+			time=setInterval(function(){
+				clearInterval(etime);
+				var yboss=document.createElement("div");
+				yboss.className="yellow";
+				var boss_x=Math.floor(Math.random()*5);
+				var x=(boss_x*0.2)*$(".road").width();
+				yboss.style.left=x+"px";
+				$(".road").append(yboss);
+				yellows.push(yboss);
+				$(".yellow").animate({
+					"top":"600px"
+				},showtime,"linear",function(){
+					$(this).remove();
+					yellows.shift(yboss);
+					//console.log(yboss.style.margin-top,me_x,boss_x);
+					points+=5;
+					console.log("animate结束执行的事件");
+				});
+				//var bx=Math.floor($(".yellow").position().left*0.015);
+				
+				var timeout=false;
+				etime();
+				function etime(){
+					if(timeout) return;
+					if($(yellows[0]).position().top>=from&&$(yellows[0]).position().top<=to){//当敌人的top位置到达自己的高度时，判断
+						console.log($(yellows[0]).position().top,from,to);
+						var bx2=Math.floor($(yellows[0]).position().left*5.1/$(".road").width());
+					if(me_x==bx2){//当此时的boss_x等于me_x，则判断发生碰撞
+						var con=confirm("你失败了，本次得分："+points+"，是否继续？");
+						$(".yellow").remove();
+						if(con){
+							points=0;
+							clearInterval(time);
+							timeout=true;
+							clearInterval(etime);
+							start(1);
+						}else{
+							points=0;
+							clearInterval(time);
+							timeout=true;
+							clearInterval(etime);
+						}
+					}
+					}
+					setTimeout(etime,30);
+				};
+			},createtime);
+		}
+		
+		</script>
+</html>
